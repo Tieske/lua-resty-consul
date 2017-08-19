@@ -70,10 +70,9 @@ local res, err = consul:get_keys(key, args)
 --local res, err = consul:get_values(key, args)
 --local res, err = consul:get_values_decoded(key, args)
 --local res, err = consul:get_values_json_decoded(key, args)
-if not res then
+if not res then                 -- Prints "This will be return a list"
     ngx.log(ngx.ERR, err)
-end      
-      
+end            
 for k,v in pairs(res)
 do
   if type(v) == "string" then
