@@ -177,6 +177,119 @@ function _M.get_json_decoded(self, key, opts)
     return res, err
 end
 
+--return all keys whose value is not null
+--add by or0or1
+function _M.get_keys(self, key, opts)
+
+    local res, err = self:get(key, opts)
+    if not res then
+        return nil, err
+    end
+
+    local keys={}
+    for _,entry in ipairs(res) do
+      if type(entry.Value) ~= type(ngx.null) then
+        table.insert(keys,entry.Key)
+      end
+    end
+
+    if #keys == 0 then
+      err="not key"
+    else
+      err=""
+    end
+    
+    return keys,err
+end
+
+--return all values, each value is not null
+--add by or0or1
+function _M.get_values(self, key, opts)
+
+    local res, err = self:get(key, opts)
+    if not res then
+        return nil, err
+    end
+
+    local values={}
+    for _,entry in ipairs(res) do
+      if type(entry.Value) ~= type(ngx.null) then
+        local tkey=entry.Key
+        values[tkey]=entry.Value
+      end
+    end
+
+    if #values == 0 then
+      err="not data"
+    else
+      err=""
+    end
+    
+    return values,err
+end
+
+--return all values, each value is not null( value need to be decoded)
+--add by or0or1
+function _M.get_values_decoded(self, key, opts)
+
+    local res, err = self:get(key, opts)
+    if not res then
+        return nil, err
+    end
+
+    local values={}
+    for _,entry in ipairs(res) do
+      if type(entry.Value) ~= type(ngx.null) then
+        local tkey=entry.Key
+        local decoded = ngx.decode_base64(entry.Value)
+        if decoded ~= nil then
+          values[tkey]=decoded
+        end
+      end
+    end
+
+    if #values == 0 then
+      err="not data"
+    else
+      err=""
+    end
+    
+    return values,err
+end
+
+
+--return all values, each value is not null( value need to be decoded before deserialize)
+--add by or0or1
+function _M.get_values_json_decoded(self, key, opts)
+
+    local res, err = self:get(key, opts)
+    if not res then
+        return nil, err
+    end
+
+    local values={}
+    for _,entry in ipairs(res) do
+      if type(entry.Value) ~= type(ngx.null) then
+        local tkey=entry.Key
+        local decoded = ngx.decode_base64(entry.Value)
+        if decoded ~= nil then
+          local json_decoded = safe_json_decode(decoded)
+          if json_decoded ~= nil then
+            values[tkey]=json_decoded
+          end
+        end
+      end
+    end
+
+    if #values == 0 then
+      err="not data"
+    else
+      err=""
+    end
+    
+    return values,err
+end
+
 
 function _M.put(self, key, value, opts)
     if not opts then
