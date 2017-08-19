@@ -168,14 +168,14 @@ Wrapper on the `get` method, but performs base64 decode on the `value` field in 
 
 `syntax: res, headers = consul:get_keys(key, opts?)`
 
-Wrapper on the `get` method, but check the `value` field in the Consul response and return  the key whose value is not null
+Wrapper on the `get` method, but check the `value` field in the Consul response and return  the key whose value is not null.
 when used, the opts arg must be set   {recurse="true"}.
 
 ### get_values
 
 `syntax: res, headers = consul:get_values(key, opts?)`
 
-Wrapper on the `get` method, but check the `value` field in the Consul response and return key and value pair,  exclude the key whose value is null
+Wrapper on the `get` method, but check the `value` field in the Consul response and return key and value pair,  exclude the key whose value is null.
 when used, the opts arg must be set   {recurse="true"}.
 
 ### get_values_decoded
