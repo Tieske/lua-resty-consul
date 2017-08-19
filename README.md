@@ -12,6 +12,10 @@ Library to interface with the consul HTTP API from ngx_lua
     * [get](#get)
     * [get_decoded](#get_decoded)
     * [get_json_decoded](#get_json_decoded)
+    * [get_keys](#get_keys)  
+    * [get_values](#get_values) 
+    * [get_values_decoded](#get_values_decoded)
+    * [get_values_json_decoded](#get_values_json_decoded)     
     * [put](#put)
     * [delete](#delete)
     * [get_client_body_reader](#get_client_body_reader)
@@ -58,6 +62,26 @@ if type(res[1].Value) == 'table' then
 else
     ngx.log(ngx.ERR, "Failed to decode value :(")
 end
+
+
+local args={recurse="true"}
+local key='/kv/some'
+local res, err = consul:get_keys(key, args)
+--local res, err = consul:get_values(key, args)
+--local res, err = consul:get_values_decoded(key, args)
+--local res, err = consul:get_values_json_decoded(key, args)
+if not res then
+    ngx.log(ngx.ERR, err)
+end      
+      
+for k,v in pairs(res)
+do
+  if type(v) == "string" then
+    ngx.log(ngx.ERR,"string:",k,v)
+  else
+    ngx.log(ngx.ERR,"json:",k,cjson.encode(v))
+  end
+end      
 
 ```
 
